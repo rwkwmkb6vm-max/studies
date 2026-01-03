@@ -1,0 +1,10 @@
+- name: Configure ISIS on IOS-XR
+  hosts: xr
+  gather_facts: no
+  tasks:
+    - name: Push ISIS base config
+      cisco.iosxr.iosxr_config:
+        lines:
+          - router isis CORE
+          - is-type level-2-only
+

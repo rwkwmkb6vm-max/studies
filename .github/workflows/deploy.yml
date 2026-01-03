@@ -1,0 +1,33 @@
+name: IOS-XR GitOps Demo
+
+on:
+  push:
+    paths:
+      - "playbooks/**"
+      - "inventory/**"
+      - ".github/workflows/**"
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use venv python if present
+        run: |
+          python3 --version
+          pip --version
+
+      - name: Ensure IOS-XR collection is present
+        run: |
+          ansible-galaxy collection list | grep -E "cisco\.iosxr|iosxr" || true
+
+      - name: Run playbook
+        env:
+          XR_USERNAME: ${{ secrets.XR_USERNAME }}
+          XR_PASSWORD: ${{ secrets.XR_PASSWORD }}
+        run: |
+          ansible-playbook -i inventory/hosts.yml playbooks/isis.yml
+
+
