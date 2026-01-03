@@ -19,9 +19,21 @@ jobs:
           python3 --version
           pip --version
 
-      - name: Ensure IOS-XR collection is present
+      - name: Setup Python deps (no pip drama)
+        shell: bash
         run: |
-          ansible-galaxy collection list | grep -E "cisco\.iosxr|iosxr" || true
+          python3 --version
+
+          # pip yoksa yükle (macOS / python3.13 için güvenli)
+          python3 -m ensurepip --upgrade || true
+
+          # pip'i upgrade et
+          python3 -m pip install --upgrade pip setuptools wheel
+
+          # ansible ve collection
+          python3 -m pip install "ansible>=10,<11"
+          ansible-galaxy collection install cisco.iosxr --force
+
 
       - name: Run playbook
         env:
