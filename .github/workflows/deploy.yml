@@ -14,6 +14,13 @@ jobs:
       XR_PASSWORD: ${{ secrets.XR_PASSWORD }}
 
     steps:
+
+
+      - name: Test connectivity 
+        run: | 
+            ping -c 3 10.62.189.43 || true 
+            nc -vz 10.62.189.43 22 || true
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
