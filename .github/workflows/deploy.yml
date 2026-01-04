@@ -21,39 +21,25 @@ jobs:
           rm -f .git/config.worktree || true
           git config --unset-all submodule || true
 
-      # -------------------------------
-      # 1) Install Python 3.11 (isolated)
-      # -------------------------------
-      - name: Install Python 3.11
+      - name: Full Python + Ansible + pylibssh setup and run
         run: |
-          brew install python@3.11
-          echo 'export PATH="/opt/homebrew/opt/python@3.11/bin:$PATH"' >> $GITHUB_ENV
+          # Install Python 3.11
+          brew install python@3.11 || true
+          export PATH="/opt/homebrew/opt/python@3.11/bin:$PATH"
 
-      # -------------------------------
-      # 2) Create isolated virtualenv
-      # -------------------------------
-      - name: Create virtualenv for Ansible
-        run: |
+          # Create virtualenv
           python3.11 -m venv ansible-env
           source ansible-env/bin/activate
+
+          # Install dependencies inside venv
           python3 -m pip install --upgrade pip
           python3 -m pip install "ansible>=10,<11"
           python3 -m pip install ansible-pylibssh
-          echo "ANSIBLE_PYTHON_INTERPRETER=$(pwd)/ansible-env/bin/python3" >> $GITHUB_ENV
+          python3 -m pip install paramiko  # fallback için
 
-      # -------------------------------
-      # 3) Install IOS-XR collection
-      # -------------------------------
-      - name: Install IOS-XR collection
-        run: |
-          source ansible-env/bin/activate
+          # Install IOS XR collection
           ansible-galaxy collection install cisco.iosxr --force
 
-      # -------------------------------
-      # 4) Run the playbook
-      # -------------------------------
-      - name: Run playbook
-        run: |
-          source ansible-env/bin/activate
+          # Run playbook
           ansible-playbook -i inventory/hosts.yml playbooks/isis.yml -vv
 
