@@ -1,6 +1,6 @@
 ---
 - name: Configure ISIS on IOS XR
-  hosts: Routers
+  hosts: xr
   gather_facts: no
   connection: network_cli
 
