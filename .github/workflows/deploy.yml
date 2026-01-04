@@ -58,7 +58,7 @@ jobs:
           python3 -m pip install ansible-pylibssh
           python3 -m pip install paramiko
 
-          # Install IOS XR collection (Galaxy erişimi patlasa bile devam et)
+          # Install IOS XR collection (hata job'u düşürmesin)
           ansible-galaxy collection install cisco.iosxr --force || true
 
           # Run playbook
