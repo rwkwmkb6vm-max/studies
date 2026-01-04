@@ -68,11 +68,13 @@ jobs:
           ANSIBLE_PERSISTENT_CONNECT_TIMEOUT: "30"
           ANSIBLE_PERSISTENT_COMMAND_TIMEOUT: "120"
         run: |
+          echo "XR_USERNAME is: $XR_USERNAME"
           ansible-playbook -i inventory/hosts.yml  playbooks/isis.yml -vv
 
 
 
 
+# trigger
 # trigger
 # trigger
 # trigger
