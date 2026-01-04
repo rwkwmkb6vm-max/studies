@@ -57,8 +57,8 @@ jobs:
       - name: Run playbook
         shell: bash
         env:
-          XR_USERNAME: ${{ secrets.XR_USERNAME }}
-          XR_PASSWORD: ${{ secrets.XR_PASSWORD }}
+          XR_USERNAME:"ansible"
+          XR_PASSWORD:"ansible"
           SSL_CERT_FILE: ${{ env.SSL_CERT_FILE }}
           REQUESTS_CA_BUNDLE: ${{ env.REQUESTS_CA_BUNDLE }}
           ANSIBLE_HOST_KEY_CHECKING: "False"
