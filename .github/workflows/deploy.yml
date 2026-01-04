@@ -21,6 +21,7 @@ jobs:
           persist-credentials: false 
           lfs: false 
           ref: ${{ github.sha }}
+          path: . # <<< EN KRİTİK SATIR — iç içe clone'u engeller
         
 
       - name: Remove any leftover submodule metadata
@@ -71,6 +72,7 @@ jobs:
           echo "XR_USERNAME is: $XR_USERNAME"
           ansible-playbook -i inventory/hosts.yml  playbooks/isis.yml -vv
 
+# trigger
 # trigger
 # trigger
 # trigger
