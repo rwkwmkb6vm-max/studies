@@ -1,7 +1,10 @@
+# force trigger
+
 name: IOS-XR GitOps Demo
 
 on:
   push:
+  workflow_dispatch:
     
 
 jobs:
@@ -67,9 +70,5 @@ jobs:
         run: |
           echo "XR_USERNAME is: $XR_USERNAME"
           ansible-playbook -i inventory/hosts.yml  playbooks/isis.yml -vv
-# trigger
-# trigger
-# trigger
-# trigger
-# trigger
+
 # trigger
