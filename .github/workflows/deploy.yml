@@ -4,7 +4,7 @@ on:
   push:
     paths:
       - "playbooks/**"
-      - "inventory/**"
+      - "inventory/hosts.ini"
       - ".github/workflows/**"
 
 jobs:
