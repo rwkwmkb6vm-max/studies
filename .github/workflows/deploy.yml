@@ -28,7 +28,8 @@ jobs:
         shell: bash
         run: |
           python3 -m pip install "ansible>=10,<11"
-          CFLAGS="-I $(brew --prefix)/include -I ext -L $(brew --prefix)/lib -lssh" pip install ansible-pylibssh
+          python3 -m pip install --no-binary=:all: ansible-pylibssh
+
 
          
 
