@@ -26,7 +26,17 @@ jobs:
           git config --unset-all submodule || true
 
       - name: Full Python + Ansible + pylibssh setup and run
+        env:
+          XR_USERNAME: ${{ secrets.XR_USERNAME }}
+          XR_PASSWORD: ${{ secrets.XR_PASSWORD }}
         run: |
+          # Export secrets into subshell (CRITICAL)
+          export XR_USERNAME="${XR_USERNAME}"
+          export XR_PASSWORD="${XR_PASSWORD}"
+
+          echo "XR_USERNAME is: $XR_USERNAME"
+          echo "XR_PASSWORD is set: $( [ -n "$XR_PASSWORD" ] && echo yes || echo no )"
+
           # Install Python 3.11
           brew install python@3.11 || true
           export PATH="/opt/homebrew/opt/python@3.11/bin:$PATH"
@@ -39,7 +49,7 @@ jobs:
           python3 -m pip install --upgrade pip
           python3 -m pip install "ansible>=10,<11"
           python3 -m pip install ansible-pylibssh
-          python3 -m pip install paramiko  # fallback için
+          python3 -m pip install paramiko
 
           # Install IOS XR collection
           ansible-galaxy collection install cisco.iosxr --force
