@@ -2,10 +2,7 @@ name: IOS-XR GitOps Demo
 
 on:
   push:
-    paths:
-      - "playbooks/**"
-      - "inventory/hosts.yml"
-      - ".github/workflows/**"
+    
 
 jobs:
   deploy:
@@ -70,11 +67,4 @@ jobs:
         run: |
           echo "XR_USERNAME is: $XR_USERNAME"
           ansible-playbook -i inventory/hosts.yml  playbooks/isis.yml -vv
-
-
-
-
-# trigger
-# trigger
-# trigger
 # trigger
