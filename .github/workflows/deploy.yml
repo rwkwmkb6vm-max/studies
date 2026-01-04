@@ -12,16 +12,14 @@ jobs:
     env:
       XR_USERNAME: ${{ secrets.XR_USERNAME }}
       XR_PASSWORD: ${{ secrets.XR_PASSWORD }}
-      ANSIBLE_DEBUG: "1" 
+      ANSIBLE_DEBUG: "1"
       ANSIBLE_LOG_PATH: "ansible-debug.log"
 
     steps:
-
-
-      - name: Test connectivity 
-        run: | 
-            ping -c 3 10.62.189.43 || true 
-            nc -vz 10.62.189.43 22 || true
+      - name: Test connectivity
+        run: |
+          ping -c 3 10.62.189.43 || true
+          nc -vz 10.62.189.43 22 || true
 
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -39,7 +37,7 @@ jobs:
           XR_USERNAME: ${{ secrets.XR_USERNAME }}
           XR_PASSWORD: ${{ secrets.XR_PASSWORD }}
         run: |
-          # Export secrets into subshell (CRITICAL)
+          # Export secrets into subshell
           export XR_USERNAME="${XR_USERNAME}"
           export XR_PASSWORD="${XR_PASSWORD}"
 
@@ -60,8 +58,8 @@ jobs:
           python3 -m pip install ansible-pylibssh
           python3 -m pip install paramiko
 
-          # Install IOS XR collection
-          ansible-galaxy collection install cisco.iosxr --force
+          # Install IOS XR collection (Galaxy erişimi patlasa bile devam et)
+          ansible-galaxy collection install cisco.iosxr --force || true
 
           # Run playbook
           ansible-playbook -i inventory/hosts.yml playbooks/isis.yml -vv
