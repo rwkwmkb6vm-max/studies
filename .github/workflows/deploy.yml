@@ -28,7 +28,8 @@ jobs:
         shell: bash
         run: |
           python3 -m pip install "ansible>=10,<11"
-          python3 -m pip install  paramiko
+          CFLAGS="-I $(brew --prefix)/include -I ext -L $(brew --prefix)/lib -lssh" pip install ansible-pylibssh
+
          
 
 
