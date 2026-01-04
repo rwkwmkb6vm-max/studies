@@ -29,7 +29,7 @@ jobs:
         run: |
           python3 -m pip install "ansible>=10,<11"
           python3 -m pip install  paramiko
-          python -m pip install --upgrade pip certifi
+         
 
 
 
