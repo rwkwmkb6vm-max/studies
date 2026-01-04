@@ -49,8 +49,11 @@ jobs:
           XR_PASSWORD: ${{ secrets.XR_PASSWORD }}
           SSL_CERT_FILE: ${{ env.SSL_CERT_FILE }}
           REQUESTS_CA_BUNDLE: ${{ env.REQUESTS_CA_BUNDLE }}
+          ANSIBLE_HOST_KEY_CHECKING: "False"
+          ANSIBLE_PERSISTENT_CONNECT_TIMEOUT: "30"
+          ANSIBLE_PERSISTENT_COMMAND_TIMEOUT: "120"
         run: |
-          ansible-playbook -i inventory/hosts.yml playbooks/isis.yml
+          ansible-playbook -i inventory/hosts.yml playbooks/isis.yml -vv
 
 
 
