@@ -15,13 +15,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with: 
+          path: .
           submodules: false 
           clean: true 
           fetch-depth: 0
           persist-credentials: false 
           lfs: false 
           ref: ${{ github.sha }}
-          path: . # <<< EN KRİTİK SATIR — iç içe clone'u engeller
         
 
       - name: Remove any leftover submodule metadata
