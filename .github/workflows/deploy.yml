@@ -12,6 +12,8 @@ jobs:
     env:
       XR_USERNAME: ${{ secrets.XR_USERNAME }}
       XR_PASSWORD: ${{ secrets.XR_PASSWORD }}
+      ANSIBLE_DEBUG: "1" 
+      ANSIBLE_LOG_PATH: "ansible-debug.log"
 
     steps:
 
