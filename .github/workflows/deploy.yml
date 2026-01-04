@@ -17,7 +17,7 @@ jobs:
       - name: Use venv python if present
         run: |
           python3 --version
-          pip --version
+          
 
       - name: Setup Python deps (no pip drama)
         shell: bash
