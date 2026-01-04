@@ -4,37 +4,36 @@ on:
   push:
     paths:
       - "playbooks/**"
-      - "inventory/hosts.ini"
+      - "inventory/hosts.yml"
       - ".github/workflows/**"
 
 jobs:
   deploy:
     runs-on: [self-hosted, macOS, X64]
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Use Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
 
       - name: Prepare Python + CA bundle (macOS runner)
         shell: bash
         run: |
           python3 --version
-          python3 -m ensurepip --upgrade || true
           python3 -m pip install --upgrade pip certifi
           CACERT=$(python3 -c "import certifi; print(certifi.where())")
           echo "SSL_CERT_FILE=$CACERT" >> $GITHUB_ENV
           echo "REQUESTS_CA_BUNDLE=$CACERT" >> $GITHUB_ENV
 
-      - name: Install Ansible
+      - name: Install Ansible + pylibssh
         shell: bash
         run: |
           python3 -m pip install "ansible>=10,<11"
-          python3 -m pip install --no-binary=:all: ansible-pylibssh
-
-
-         
-
-
-
+          python3 -m pip install ansible-pylibssh
 
       - name: Install IOS-XR collection
         shell: bash
@@ -55,7 +54,8 @@ jobs:
           ANSIBLE_PERSISTENT_CONNECT_TIMEOUT: "30"
           ANSIBLE_PERSISTENT_COMMAND_TIMEOUT: "120"
         run: |
-          ansible-playbook -i inventory/hosts.yml playbooks/isis.yml -vv
+          ansible-playbook -i inventory/hosts.yml  playbooks/isis.yml -vv
+
 
 
 
