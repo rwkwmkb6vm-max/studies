@@ -12,48 +12,40 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Checkout
-      - name: Fix SSL certs for Ansible Galaxy (macOS)
-        shell: bash
-        run: |
-          python3 -m pip install --upgrade pip certifi
-          python3 - <<'PY'
-          import certifi, shutil, os
-          target = os.path.join(os.environ.get("RUNNER_TEMP", "/tmp"), "cacert.pem")
-          shutil.copy(certifi.where(), target)
-          print("CA bundle:", target)
-          PY
-
         uses: actions/checkout@v4
 
-      - name: Use venv python if present
+      - name: Prepare Python + CA bundle (macOS runner)
+        shell: bash
         run: |
           python3 --version
-          
+          python3 -m ensurepip --upgrade || true
+          python3 -m pip install --upgrade pip certifi
+          CACERT=$(python3 -c "import certifi; print(certifi.where())")
+          echo "SSL_CERT_FILE=$CACERT" >> $GITHUB_ENV
+          echo "REQUESTS_CA_BUNDLE=$CACERT" >> $GITHUB_ENV
 
-      - name: Setup Python deps (no pip drama)
+      - name: Install Ansible
+        shell: bash
+        run: |
+          python3 -m pip install "ansible>=10,<11"
+
+      - name: Install IOS-XR collection
         shell: bash
         env:
-          SSL_CERT_FILE: ${{ runner.temp }}/cacert.pem
-          REQUESTS_CA_BUNDLE: ${{ runner.temp }}/cacert.pem
+          SSL_CERT_FILE: ${{ env.SSL_CERT_FILE }}
+          REQUESTS_CA_BUNDLE: ${{ env.REQUESTS_CA_BUNDLE }}
         run: |
-          python3 --version
-
-          # pip yoksa yükle (macOS / python3.13 için güvenli)
-          python3 -m ensurepip --upgrade || true
-
-          # pip'i upgrade et
-          python3 -m pip install --upgrade pip setuptools wheel
-
-          # ansible ve collection
-          python3 -m pip install "ansible>=10,<11"
           ansible-galaxy collection install cisco.iosxr --force
 
-
       - name: Run playbook
+        shell: bash
         env:
           XR_USERNAME: ${{ secrets.XR_USERNAME }}
           XR_PASSWORD: ${{ secrets.XR_PASSWORD }}
+          SSL_CERT_FILE: ${{ env.SSL_CERT_FILE }}
+          REQUESTS_CA_BUNDLE: ${{ env.REQUESTS_CA_BUNDLE }}
         run: |
           ansible-playbook -i inventory/hosts.yml playbooks/isis.yml
+
 
 
