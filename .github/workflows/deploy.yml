@@ -9,6 +9,10 @@ jobs:
   deploy:
     runs-on: self-hosted
 
+    env:
+      XR_USERNAME: ${{ secrets.XR_USERNAME }}
+      XR_PASSWORD: ${{ secrets.XR_PASSWORD }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
