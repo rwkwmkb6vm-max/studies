@@ -1,0 +1,16 @@
+---
+- name: Test IOS XR command
+  hosts: Routers
+  gather_facts: no
+  connection: network_cli
+
+  tasks:
+    - name: Run show version
+      cisco.iosxr.iosxr_command:
+        commands:
+          - show version
+      register: output
+
+    - debug:
+        var: output
+
