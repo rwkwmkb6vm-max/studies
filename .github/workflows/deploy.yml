@@ -5,7 +5,6 @@ name: IOS-XR GitOps Demo
 on:
   push:
   workflow_dispatch:
-    
 
 jobs:
   deploy:
@@ -14,24 +13,20 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with: 
+        with:
           path: .
-          submodules: false 
-          clean: true 
+          submodules: false
+          clean: true
           fetch-depth: 0
-          persist-credentials: false 
-          lfs: false 
+          persist-credentials: false
+          lfs: false
           ref: ${{ github.sha }}
-        
 
       - name: Remove any leftover submodule metadata
         run: |
           rm -rf .git/modules || true
-          rm -rf .git/modules || true
           rm -f .git/config.worktree || true
           git config --unset-all submodule || true
-
-
 
       - name: Prepare Python + CA bundle (macOS runner)
         shell: bash
@@ -49,6 +44,10 @@ jobs:
           python3.11 -m pip install "ansible>=10,<11"
           python3.11 -m pip install ansible-pylibssh
 
+      - name: Force Ansible to use Python 3.11
+        shell: bash
+        run: |
+          echo "ANSIBLE_PYTHON_INTERPRETER=$(which python3.11)" >> $GITHUB_ENV
 
       - name: Install IOS-XR collection
         shell: bash
@@ -65,18 +64,12 @@ jobs:
           XR_PASSWORD: "ansible"
           SSL_CERT_FILE: ${{ env.SSL_CERT_FILE }}
           REQUESTS_CA_BUNDLE: ${{ env.REQUESTS_CA_BUNDLE }}
-          ANSIBLE_HOST_KEY_CHECKING: "False"
           ANSIBLE_PYTHON_INTERPRETER: ${{ env.ANSIBLE_PYTHON_INTERPRETER }}
+          ANSIBLE_HOST_KEY_CHECKING: "False"
           ANSIBLE_PERSISTENT_CONNECT_TIMEOUT: "30"
           ANSIBLE_PERSISTENT_COMMAND_TIMEOUT: "120"
         run: |
           echo "XR_USERNAME is: $XR_USERNAME"
-          ansible-playbook -i inventory/hosts.yml  playbooks/isis.yml -vv
+          ansible-playbook -i inventory/hosts.yml playbooks/isis.yml -vv
 
-# trigger
-# trigger
-# trigger
-# trigger
-# trigger
-# trigger
 # trigger
