@@ -12,6 +12,17 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Checkout
+      - name: Fix SSL certs for Ansible Galaxy (macOS)
+        shell: bash
+        run: |
+          python3 -m pip install --upgrade pip certifi
+          python3 - <<'PY'
+          import certifi, shutil, os
+          target = os.path.join(os.environ.get("RUNNER_TEMP", "/tmp"), "cacert.pem")
+          shutil.copy(certifi.where(), target)
+          print("CA bundle:", target)
+          PY
+
         uses: actions/checkout@v4
 
       - name: Use venv python if present
@@ -21,6 +32,9 @@ jobs:
 
       - name: Setup Python deps (no pip drama)
         shell: bash
+        env:
+          SSL_CERT_FILE: ${{ runner.temp }}/cacert.pem
+          REQUESTS_CA_BUNDLE: ${{ runner.temp }}/cacert.pem
         run: |
           python3 --version
 
