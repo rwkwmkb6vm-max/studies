@@ -57,8 +57,8 @@ jobs:
       - name: Run playbook
         shell: bash
         env:
-          XR_USERNAME:"ansible"
-          XR_PASSWORD:"ansible"
+          XR_USERNAME: "ansible"
+          XR_PASSWORD: "ansible"
           SSL_CERT_FILE: ${{ env.SSL_CERT_FILE }}
           REQUESTS_CA_BUNDLE: ${{ env.REQUESTS_CA_BUNDLE }}
           ANSIBLE_HOST_KEY_CHECKING: "False"
@@ -67,4 +67,5 @@ jobs:
         run: |
           echo "XR_USERNAME is: $XR_USERNAME"
           ansible-playbook -i inventory/hosts.yml  playbooks/isis.yml -vv
+# trigger
 # trigger
