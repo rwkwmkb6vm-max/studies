@@ -28,6 +28,10 @@ jobs:
         shell: bash
         run: |
           python3 -m pip install "ansible>=10,<11"
+          python3 -m pip install paramiko
+          python3 -m pip install ansible-pylibssh
+
+
 
       - name: Install IOS-XR collection
         shell: bash
