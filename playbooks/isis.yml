@@ -7,7 +7,11 @@
   tasks:
     - name: Configure ISIS CORE as level-2-only
       cisco.iosxr.iosxr_config:
-        lines:
+        parents:
           - router isis CORE
+        lines:
           - is-type level-2-only
+        commit: true
+
+
 
