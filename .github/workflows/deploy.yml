@@ -48,6 +48,12 @@ jobs:
           python3 -m pip install "ansible>=10,<11"
           python3 -m pip install ansible-pylibssh
 
+      - name: Force-install pylibssh into Ansible's Python
+        shell: bash
+        run: |
+           echo "ANSIBLE_PYTHON_INTERPRETER=$(which python3)" >> $GITHUB_ENV
+
+
       - name: Force Ansible to use Python 3.13
         shell: bash
         run: |
