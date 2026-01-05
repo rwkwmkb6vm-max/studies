@@ -7,20 +7,20 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
-
-    container:
-      image: ubuntu:22.04
+    runs-on: [self-hosted, Linux, ARM64]
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
       - name: Install Ansible
         run: |
-          apt update
-          apt install -y python3-pip sshpass
-          pip install ansible paramiko
-
+          sudo apt update
+          sudo apt install -y python3-pip sshpass
+          pip3 install ansible paramiko
 
       - name: Deploy to XR
-        run: ansible-playbook -i work/hosts.yml work/site.yml
+        run: |
+          ansible-playbook \
+            -i inventory/hosts.yml \
+            playbooks/isis.yml
