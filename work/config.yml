@@ -1,0 +1,13 @@
+- name: Push configuration to XR
+  hosts: xr1_cli
+  gather_facts: no
+
+  vars:
+    xr_config: |
+      router isis CORE
+        is-type level-2-only
+
+  tasks:
+    - name: Push config to XR
+      ansible.netcommon.cli_config:
+        config: "{{ xr_config }}"

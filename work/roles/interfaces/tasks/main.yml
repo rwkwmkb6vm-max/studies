@@ -1,0 +1,3 @@
+- name: Configure interfaces on XR (placeholder)
+  ansible.builtin.debug:
+    msg: "Interfaces role placeholder - no config yet"

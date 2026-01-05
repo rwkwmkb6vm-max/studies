@@ -1,0 +1,5 @@
+- name: Configure ISIS using role
+  hosts: xr1_cli
+  gather_facts: no
+  roles:
+    - isis

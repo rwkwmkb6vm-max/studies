@@ -1,0 +1,9 @@
+- name: Customer XR configuration
+  hosts: xr1_cli
+  gather_facts: no
+
+  roles:
+    - base
+    - isis
+    - bgp
+    - interfaces

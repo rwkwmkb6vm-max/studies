@@ -1,0 +1,5 @@
+- name: Configure ISIS on XR
+  ansible.netcommon.cli_config:
+    config: |
+      router isis CORE
+        is-type level-2-only

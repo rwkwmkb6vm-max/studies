@@ -1,0 +1,3 @@
+- name: Ensure basic XR state (placeholder)
+  ansible.builtin.debug:
+    msg: "Base role executed"

@@ -1,0 +1,21 @@
+- name: Run show commands on XR
+  hosts: xr1_cli
+  gather_facts: no
+  tasks:
+    - name: Show version
+      ansible.netcommon.cli_command:
+        command: "show version"
+      register: show_version
+
+    - name: Print show version
+      debug:
+        var: show_version.stdout_lines
+
+    - name: Show ISIS neighbors
+      ansible.netcommon.cli_command:
+        command: "show isis neighbors"
+      register: show_isis
+
+    - name: Print show ISIS neighbors
+      debug:
+        var: show_isis.stdout_lines
