@@ -9,13 +9,18 @@ jobs:
   deploy:
     runs-on: [self-hosted, Linux, ARM64]
 
+    container:
+      image: ubuntu:22.04
+      options: --network host
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Install Ansible (pip only)
+      - name: Install Ansible
         run: |
-          pip3 install --upgrade pip
+          apt update
+          apt install -y python3-pip
           pip3 install ansible paramiko
 
       - name: Deploy to XR
