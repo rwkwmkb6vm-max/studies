@@ -1,66 +1,25 @@
-name: IOS-XR GitOps Demo
+name: Deploy to XR
 
 on:
   push:
-    branches: [ "main" ]
-  workflow_dispatch:
+    branches:
+      - main
 
 jobs:
   deploy:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
-    env:
-      XR_USERNAME: ${{ secrets.XR_USERNAME }}
-      XR_PASSWORD: ${{ secrets.XR_PASSWORD }}
-      ANSIBLE_DEBUG: "1"
-      ANSIBLE_LOG_PATH: "ansible-debug.log"
+    container:
+      image: ubuntu:22.04
 
     steps:
-      - name: Test connectivity
+      - uses: actions/checkout@v3
+
+      - name: Install Ansible
         run: |
-          ping -c 3 10.62.189.43 || true
-          nc -vz 10.62.189.43 22 || true
+          apt update
+          apt install -y ansible sshpass python3-pip
+          pip install paramiko
 
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-
-      - name: Clean broken submodule metadata
-        run: |
-          rm -rf .git/modules || true
-          rm -f .git/config.worktree || true
-          git config --unset-all submodule || true
-
-      - name: Full Python + Ansible + pylibssh setup and run
-        env:
-          XR_USERNAME: ${{ secrets.XR_USERNAME }}
-          XR_PASSWORD: ${{ secrets.XR_PASSWORD }}
-        run: |
-          # Export secrets into subshell
-          export XR_USERNAME="${XR_USERNAME}"
-          export XR_PASSWORD="${XR_PASSWORD}"
-
-          echo "XR_USERNAME is: $XR_USERNAME"
-          echo "XR_PASSWORD is set: $( [ -n "$XR_PASSWORD" ] && echo yes || echo no )"
-
-          # Install Python 3.11
-          brew install python@3.11 || true
-          export PATH="/opt/homebrew/opt/python@3.11/bin:$PATH"
-
-          # Create virtualenv
-          python3.11 -m venv ansible-env
-          source ansible-env/bin/activate
-
-          # Install dependencies inside venv
-          python3 -m pip install --upgrade pip
-          python3 -m pip install "ansible>=10,<11"
-          python3 -m pip install ansible-pylibssh
-          python3 -m pip install paramiko
-
-          # Install IOS XR collection (hata job'u düşürmesin)
-          ansible-galaxy collection install cisco.iosxr --force || true
-
-          # Run playbook
-          ansible-playbook -i inventory/hosts.yml playbooks/isis.yml -vv
-
+      - name: Deploy to XR
+        run: ansible-playbook -i work/hosts.yml work/site.yml
