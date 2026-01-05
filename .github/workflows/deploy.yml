@@ -18,8 +18,9 @@ jobs:
       - name: Install Ansible
         run: |
           apt update
-          apt install -y ansible sshpass python3-pip
-          pip install paramiko
+          apt install -y python3-pip sshpass
+          pip install ansible paramiko
+
 
       - name: Deploy to XR
         run: ansible-playbook -i work/hosts.yml work/site.yml
