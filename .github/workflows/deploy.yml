@@ -16,7 +16,7 @@ jobs:
       - name: Install Ansible (pip only)
         run: |
           pip3 install --upgrade pip
-          pip3 install ansible paramiko sshpass
+          pip3 install ansible paramiko
 
       - name: Deploy to XR
         run: |
