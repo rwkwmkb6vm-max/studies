@@ -13,11 +13,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Install Ansible
+      - name: Install Ansible (pip only)
         run: |
-          apt update
-          apt install -y python3-pip sshpass
-          pip3 install ansible paramiko
+          pip3 install --upgrade pip
+          pip3 install ansible paramiko sshpass
 
       - name: Deploy to XR
         run: |
